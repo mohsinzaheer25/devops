@@ -1,0 +1,44 @@
+pipeline{
+    agent {label 'master'}
+    parameters {
+        string (
+            name: 'VERSION', 
+            defaultValue: '1.0', 
+            description: 'Docker Image Version',
+            trim: false
+        )
+    }
+    stages{
+        stage("Clonning Repo"){
+            steps{
+                git credentialsId: '490b6721-9618-404d-85bf-31307a9dbd1e', url: 'https://github.com/mohsinzaheer25/moviesinfo.git'
+            }
+        }
+        stage("Building Docker Image"){
+            steps{
+                sh 'docker build -t moviesinfo $WORKSPACE/.'
+            }
+        }
+        stage("Tagging the Image"){
+            steps{
+                 sh 'docker tag moviesinfo x.x.x.x:8083/moviesinfo:${VERSION}'
+            }
+        }
+        stage("Pushing Docker Image To Nexus"){
+            steps{
+                 sh 'docker push x.x.x.x:8083/moviesinfo:${VERSION}'
+            }
+        }
+    }
+    post{
+        always{
+            echo "========always========"
+        }
+        success{
+            echo "========pipeline executed successfully ========"
+        }
+        failure{
+            echo "========pipeline execution failed========"
+        }
+    }
+}
