@@ -1,0 +1,4 @@
+---
+# defaults file for user_management
+group_create: True
+user_create: True

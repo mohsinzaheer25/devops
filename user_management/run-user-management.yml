@@ -1,0 +1,8 @@
+---
+- hosts: all
+  strategy: free
+  gather_facts: true
+  become: true
+  become_user: root
+  roles:
+    - user_management

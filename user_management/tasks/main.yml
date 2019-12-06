@@ -1,0 +1,17 @@
+---
+# tasks file for user_management
+  - name: Creating {{ inputGroup }} on {{ansible_hostname}}
+    group:
+       name: '{{inputGroup}}'
+       state: present
+    when: group_create == True 
+
+  - name: Creating {{ userName}} User on {{ansible_hostname}} 
+    user:
+      name: "{{userName}}"
+      password: "{{ userPWD |  password_hash('sha512') }}"
+      groups: "{{ userGroups }}"
+      #createhome: yes
+      createhome: "{{userHomedic}}"
+    # no_log: true
+    when: user_create == True
